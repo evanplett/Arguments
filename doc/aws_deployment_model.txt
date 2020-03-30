@@ -1,5 +1,31 @@
 @startuml
+node "Git" {
+  node "ArgumentEngine" {
+    rectangle ArgumentEngineCode << repository >>
+    queue ArgumentEngineActions
+    file ArgumentEngineContainer << docker >>
 
+    ArgumentEngineCode -right-> ArgumentEngineActions
+    ArgumentEngineActions -right-> ArgumentEngineContainer
+  }
+  node "ArgumentEditor" {
+    rectangle ArgumentEditorCode << repository >>
+    queue ArgumentEditorActions
+    file ArgumentEditorContainer << docker >>
 
+    ArgumentEditorCode -right-> ArgumentEditorActions
+    ArgumentEditorActions -right-> ArgumentEditorContainer
+  }
+}
 
+node "Amazon" {
+  [Fargate]
+}
+
+ArgumentEngineContainer -down-> Fargate
+ArgumentEditorContainer -down-> Fargate
+
+actor Browser
+
+Browser -right-> Fargate
 @enduml
